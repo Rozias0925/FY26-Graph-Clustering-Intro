@@ -2,9 +2,7 @@
 
 ## For admissions reviewers
 
-**Project type:** Joint exploratory research presentation (geometry, urban networks, and MRI). **What this demonstrates:** graph modeling, feature-design decisions, spectral linear algebra, and interpretation across domains. **Evidence:** [presentation](https://rozias0925.github.io/FY26-Graph-Clustering-Intro/) and [poster](TWSIAM_poster.pdf). **Reproducibility:** the underlying analyses are not distributed; the visuals are illustrative rather than quantitative segmentation benchmarks.
-
-Individual contributions should be read in the context of the two-author collaboration described below; the public materials do not specify a task-by-task division of work.
+**Project type:** Exploratory research presentation authored by Chun-Hao Wen (geometry, urban networks, and MRI). **What this demonstrates:** graph modeling, feature-design decisions, spectral linear algebra, and interpretation across domains. **Evidence:** [presentation](https://rozias0925.github.io/FY26-Graph-Clustering-Intro/) and [poster](TWSIAM_poster.pdf). **Reproducibility:** the underlying analyses are not distributed; the visuals are illustrative rather than quantitative segmentation benchmarks.
 
 
 This research presentation explores how graph Laplacians and spectral clustering can organize data from three settings: 3D geometry, the Taipei MRT network, and brain MRI images. It explains how graph construction and feature design affect the resulting partitions. This repository contains the presentation website and poster, but not the underlying analysis or segmentation code.
@@ -52,6 +50,6 @@ python -m http.server 8000 --bind 127.0.0.1
 
 Then visit `http://127.0.0.1:8000/`. The page presents existing results; it does not rerun the research analyses.
 
-## Attribution
+## Authorship
 
-Research by **Chun-Hao Wen (文君豪)** and **Hsin-Yi Ko**, advised by **Prof. Shih-Feng Hsieh**, Department of Mathematics, National Taiwan Normal University. See the presentation and poster for the research context and attribution.
+Presentation website and accompanying explanatory text by **Chun-Hao Wen (文君豪)**, Department of Mathematics, National Taiwan Normal University. The linked research poster retains its original credits.

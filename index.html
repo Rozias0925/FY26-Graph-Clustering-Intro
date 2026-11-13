@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Graph Laplacian Applications in Geometry, Urban Networks & MRI</title>
+    <title>Graph Laplacians & Spectral Clustering | Research Presentation</title>
+    <meta name="description" content="Exploratory spectral clustering research across 3D geometry, Taipei MRT networks, and MRI images, with methods and limitations.">
     <link rel="icon" href="icon.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
@@ -308,19 +309,20 @@
         <img src="ntnu_logo.png" alt="National Taiwan Normal University Logo" style="height: 200px; margin-bottom: 30px;">
         
         <h1>Graph Laplacian & Spectral Clustering:<br>Applications in Geometric Models, Urban Networks, and Medical Imaging</h1>
-        <p class="subtitle">Breaking the boundaries of linear clustering through structural similarity, feature extraction engineering, and spectral transformation to redefine data analytics.</p>
+        <p class="subtitle">Exploring how graph construction and feature choices shape clustering across geometry, transportation networks, and MRI images.</p>
 
         <div style="margin-top: 25px; background: rgba(255, 255, 255, 0.15); padding: 15px 40px; border-radius: 12px; display: inline-block; backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.2);">
-            <p style="margin: 5px 0; font-size: 1.25rem;"><strong>Authors:</strong> Chun-Hao, Wen ; Hsin-Yi, Ko</p>
-            <p style="margin: 5px 0; font-size: 1.1rem; color: #cbd5e1;"><strong>Advisor:</strong> Prof. Shih-Feng, Hsieh</p>
+            <p style="margin: 5px 0; font-size: 1.25rem;"><strong>Authors:</strong> Chun-Hao Wen; Hsin-Yi Ko</p>
+            <p style="margin: 5px 0; font-size: 1.1rem; color: #cbd5e1;"><strong>Advisor:</strong> Prof. Shih-Feng Hsieh</p>
         </div>
+        <p style="margin: 18px auto 0; font-size: 0.98rem;"><a href="https://github.com/Rozias0925/FY26-Graph-Clustering-Intro" target="_blank" rel="noopener noreferrer" style="color: #fff; text-decoration: underline;">GitHub repository &amp; README ↗</a> · <a href="TWSIAM_poster.pdf" style="color: #fff; text-decoration: underline;">Research poster ↗</a></p>
     </header>
 
     <div class="container">
         <section id="graLa">
             <h2>1. Introduction to Graph Laplacian</h2>
-            <p>In the field of machine learning, real-world data rarely falls into simple linear or spherical distributions. If traditional clustering methods like K-means are applied directly, they often fail because they are constrained by the raw data type, leading to suboptimal clustering results.</p>
-            <p>To overcome this, we introduce <strong>Graph-based</strong> methodologies. The core philosophy is: <span class="highlight-text">capture the intrinsic structure of the data</span> and establish a concept of "similarity" based on that structure. Through this approach, similar data points are pulled closer together within the graph space, facilitating highly logical and physical clustering.</p>
+            <p>In the field of machine learning, real-world data rarely falls into simple linear or spherical distributions. K-means on raw Euclidean coordinates can struggle with non-convex clusters or representations that omit relevant relationships.</p>
+            <p>To overcome this, we introduce <strong>Graph-based</strong> methodologies. The core philosophy is: <span class="highlight-text">capture the intrinsic structure of the data</span> and establish a concept of "similarity" based on that structure. Through this approach, similar data points are pulled closer together within the graph space, providing an alternative representation for exploratory clustering.</p>
 
             <h3>Three Pillars of Graph Construction</h3>
             <p>To construct a Graph Laplacian, we must first map our data into a graph structure using a specific perspective. This involves three critical elements:</p>
@@ -340,33 +342,33 @@
             <div class="math-box">
                 \[ L = D - W \]
             </div>
-            <p>This matrix perfectly encapsulates the geometric and structural features of the entire dataset, serving as the most crucial foundation for our subsequent "spectral transformation."</p>
+            <p>This matrix encodes the similarities specified by our graph design; what it captures depends on the chosen features, edges, and weighting scheme.</p>
         </section>
         
         <section id="specCl">
             <h2>2. Introduction to Spectral Clustering</h2>
-            <p>The concept of Spectral Clustering is highly intuitive. Think of it as <strong>searching for the perfect "spatial transformation" and "clustering mechanism."</strong> Instead of making hard cuts in a complex, high-dimensional raw space, it utilizes the Graph Laplacian to map data into a low-dimensional feature space, allowing entangled non-linear data to separate naturally.</p>
+            <p>The concept of Spectral Clustering is highly intuitive. It offers <strong>a graph-based spectral representation for clustering.</strong> Instead of making hard cuts in a complex, high-dimensional raw space, it utilizes the Graph Laplacian to map data into a low-dimensional feature space, which can make certain non-convex structures easier to separate.</p>
 
             <h3>Core Objective: Minimizing Clustering "Cost"</h3>
-            <p>The core task of spectral clustering is to find an optimal indicator vector \(v\) that minimizes the following quadratic form. We can conceptualize this equation as the <span class="highlight-text">"Cost Function"</span> of clustering:</p>
+            <p>For an undirected graph with nonnegative weights, the Laplacian quadratic form measures how much a graph signal varies across strongly connected nodes:</p>
             <div class="math-box">
                 \[ v^T L v = \frac{1}{2}\sum_{i,j} w_{i,j}(v_i - v_j)^2 \]
             </div>
-            <p>Here, \(w_{i,j}\) represents the similarity between two data points, while \(v_i\) and \(v_j\) represent their new positions after clustering:</p>
+            <p>For a connected graph, the nontrivial minimum is obtained by minimizing this energy subject to \(v^T\mathbf{1}=0\) and \(\|v\|_2=1\); the minimizer is a Fiedler eigenvector. Here, \(v_i\) and \(v_j\) are values of a graph signal, not cluster labels themselves:</p>
             <ul>
-                <li>If two data points have a very high similarity \(w_{i,j}\) but are assigned far apart during clustering (causing \((v_i - v_j)^2\) to be large), the overall <strong>total cost of the system explodes</strong>.</li>
+                <li>If two data points have a very high similarity \(w_{i,j}\) but are assigned far apart during clustering (causing \((v_i - v_j)^2\) to be large), the energy increases.</li>
                 <li>Therefore, minimizing this cost function inherently <span class="highlight-text">encourages "highly similar (strongly connected) data points to be grouped into the same cluster."</span></li>
             </ul>
 
             <h3>Linear Algebra Solution: Physical Significance of Eigenvectors</h3>
-            <p>According to linear algebra, the solution to this cost optimization problem directly corresponds to the <strong>Eigenvectors</strong> of the Laplacian matrix \(L\). We sort all eigenvalues from smallest to largest and analyze them deeply:</p>
+            <p>Under these constraints, a Fiedler eigenvector solves the relaxed two-way partitioning problem for a connected graph. Larger spectral embeddings can use several small-eigenvalue eigenvectors, with conventions depending on the formulation:</p>
             <ul>
-                <li><strong>The smallest eigenvalue \(\lambda_1 = 0\):</strong> Because the sum of each row in \(L = D - W\) is exactly 0, the smallest eigenvalue is always 0, and its corresponding eigenvector is a vector of "all 1s". This mathematically implies forcing all data points into a single cluster, which <strong>holds no physical meaning</strong> for actual clustering.</li>
-                <li><strong>Utilizing eigenvectors from the 2nd onward:</strong> To achieve meaningful clustering, we discard the first eigenvector and <span class="highlight-text">begin utilizing the eigenvector corresponding to the second smallest eigenvalue (known as the Fiedler vector)</span>. We can accurately determine structural traits based on the signs (positive/negative), quadrants, or relative positions within these eigenvectors.</li>
+                <li><strong>The smallest eigenvalue \(\lambda_1 = 0\):</strong> The constant vector is a zero eigenvector of \(L=D-W\). When the graph is connected, this zero eigenvalue is simple; for a disconnected graph, its multiplicity equals the number of connected components.</li>
+                <li><strong>Utilizing eigenvectors from the 2nd onward:</strong> To achieve meaningful clustering, we discard the first eigenvector and <span class="highlight-text">begin utilizing the eigenvector corresponding to the second smallest eigenvalue (known as the Fiedler vector)</span>. The signs and relative coordinates can suggest partitions, but their interpretation depends on graph construction and eigenvector ambiguity.</li>
             </ul>
 
             <h3>Low-Dimensional Mapping & K-means Integration</h3>
-            <p>The final clustering step is straightforward: we select the top \(k\) eigenvectors (e.g., the 2nd to the \((k+1)\)-th), arrange them as column vectors to form a new matrix. <strong>The \(i\)-th row of this matrix becomes the new, low-dimensional coordinate for the \(i\)-th data point</strong> in a completely new feature space. Finally, we simply run the traditional <strong>K-means algorithm</strong> on this highly optimized, structurally clear coordinate system to perfectly accomplish non-linear data clustering!</p>
+            <p>In one common unnormalized formulation, selected nontrivial eigenvectors are arranged as columns of a spectral embedding matrix; other formulations include the trivial eigenvector among the smallest \(k\) eigenvectors. <strong>The \(i\)-th row of this matrix becomes the new, low-dimensional coordinate for the \(i\)-th data point</strong> in a completely new feature space. Finally, we simply run the traditional <strong>K-means algorithm</strong> on this spectral coordinate representation to obtain a candidate partition.</p>
         </section>
 
         <section id="feteg">
@@ -375,16 +377,16 @@
 
             <h3>I. Redefining Physical Units & Dimensionality Reduction</h3>
             <ul>
-                <li><strong>Superpixel Dimensionality Reduction for Medical Images (MRI):</strong> A single MRI slice easily contains tens of thousands of pixels. Treating each pixel as a node overloads matrix computations. We integrated the <strong>SLIC algorithm</strong> to aggregate similar pixels into roughly 400 "Superpixels". This not only homogenizes local noise but drastically reduces matrix complexity, laying the groundwork for subsequent spectral analysis.</li>
-                <li><strong>9D Feature Extraction for 3D Models (Stanford Bunny):</strong> For spatial models, we transform each triangular face into a 9-dimensional feature vector, including: <strong>Incenter Coordinates (x,y,z)</strong>, <strong>PCA-projected Incenter Coordinates (x,y,z)</strong> (to judge relative quadrant positioning), and the <strong>Normal Vector (x,y,z)</strong> to portray surface undulations.</li>
+                <li><strong>Superpixel Dimensionality Reduction for Medical Images (MRI):</strong> A single MRI slice easily contains tens of thousands of pixels. Treating each pixel as a node overloads matrix computations. We integrated the <strong>SLIC algorithm</strong> to aggregate similar pixels into roughly 400 "Superpixels". This reduces the graph size substantially, though superpixel boundaries and signal preservation depend on their construction.</li>
+                <li><strong>9D Feature Extraction for 3D Models (Stanford Bunny):</strong> For spatial models, we transform each triangular face into a 9-dimensional feature vector, including: <strong>Incenter Coordinates (x,y,z)</strong>, <strong>PCA-projected Incenter Coordinates (x,y,z)</strong> (to represent a rotated coordinate system), and the <strong>Normal Vector (x,y,z)</strong> to describe local surface orientation. Keeping all three PCA coordinates adds no independent geometric information by itself; any benefit depends on the effective feature weighting.</li>
             </ul>
 
             <h3>II. Gradient-Free Optimization for Medical Imaging</h3>
             <p>During our practical MRI brain tumor analysis, we discovered that normal physiological structures in the brain (like sulci and ventricles) inherently possess extremely high edge contrast. If we blindly incorporate the "Gradient" features commonly used in traditional image processing, the algorithm gets severely misled by the sharp edges of normal healthy tissues.</p>
-            <p>Therefore, we made a crucial engineering decision: <span class="highlight-text">decisively discard gradient features</span>. By allowing the feature space to be entirely dominated by "Brightness" and "Regional Variance," we successfully bypassed structural traps, focusing entirely on capturing the blurred, infiltrative boundaries typical of tumors.</p>
+            <p>Therefore, we made a crucial engineering decision: <span class="highlight-text">decisively discard gradient features</span>. For the illustrated cases, we prioritized brightness and regional-variance features to reduce sensitivity to strong edges in normal anatomy. This choice remains dataset-specific and requires quantitative validation.</p>
 
             <h3>III. Feature Normalization</h3>
-            <p>Because our extracted features contain varying physical meanings and numerical scales (e.g., the scale of spatial coordinates differs entirely from normal vectors), we applied strict <strong>Row Normalization</strong> to all features before they enter the Graph Laplacian. This prevents features with large absolute values from "dominating" the Gaussian similarity computation, ensuring that every dimensional feature contributes fairly and stably to the final clustering outcome.</p>
+            <p>Because our extracted features contain varying physical meanings and numerical scales (e.g., the scale of spatial coordinates differs entirely from normal vectors), we applied strict <strong>Row Normalization</strong> to all features before they enter the Graph Laplacian. This controls the norm of each feature vector, but it does not by itself equalize the contribution of each dimension; feature scaling and weighting remain important.</p>
         </section>
 
         <section id="stnbun">
@@ -394,14 +396,14 @@
             <div class="grid-2">
                 <div>
                     <h3>I. The Blind Spot of Traditional Euclidean Distance</h3>
-                    <p>Intuitively, the simplest clustering approach is to use the "incenter coordinates" of the triangular faces and apply K-means clustering using traditional <strong>Euclidean distance</strong>. However, empirical results show that this approach is <span class="highlight-text">highly inaccurate</span> (as seen in Figure 3), because it completely ignores the spatial geometric undulations and structural features represented by surface normal vectors.</p>
+                    <p>Intuitively, the simplest clustering approach is to use the "incenter coordinates" of the triangular faces and apply K-means clustering using traditional <strong>Euclidean distance</strong>. However, the illustrated results show that this approach can produce <span class="highlight-text">less coherent geometric partitions</span> (as seen in Figure 3), because it completely ignores the spatial geometric undulations and structural features represented by surface normal vectors.</p>
                     
                     <h3>II. Geometric Optimization of Core Parameter \(\sigma\)</h3>
                     <p>As described in our feature engineering section, we shifted to a 9D feature vector. Furthermore, we adjusted the denominator parameter \(\sigma\) in the Gaussian Kernel. We calculate the "radian difference" between unit normal vectors of two faces and take the average of all radian differences. To prevent negatives or zeros, we take the maximum between this value and the computer's minimum precision "eps":</p>
                     <div class="math-box">
                         \[ \sigma = \max(\text{mean}(\text{Radian Difference}), \text{eps}) \]
                     </div>
-                    <p><strong>Core Concept:</strong> This dynamic \(\sigma\) defines how far apart a relationship can be while still being considered "connected." It filters out noise-like micro-geometric connections on one hand, and <span class="highlight-text">effectively amplifies the gap between similarities</span> on the other, making cluster boundaries significantly clearer.</p>
+                    <p><strong>Core Concept:</strong> This \(\sigma\) sets the scale of similarity decay, not a hard connectivity cutoff. Its effect on the partition depends on the features and graph sparsity.</p>
                 </div>
                 <figure>
                     <img src="bunny_naive.png" alt="Traditional Euclidean Distance Clustering Result" style="max-width: 100%; width: 320px; height: auto; margin: 0 auto; display: block;">
@@ -410,7 +412,7 @@
             </div>
 
             <h3>III. Spectral Clustering Results Showcase</h3>
-            <p>Once we transition the data into the new feature space constructed by the Laplacian matrix, the clustering results exhibit astonishing detail and geometric adaptability as we increase the number of eigenvectors used:</p>
+            <p>Once we transition the data into the new feature space constructed by the Laplacian matrix, the clustering results show partitions at different levels of detail as we increase the number of eigenvectors used:</p>
 
             <div class="grid-3">
                 <figure>
@@ -423,10 +425,10 @@
                 </figure>
                 <figure>
                     <img src="bunny_k12.png" alt="Stanford Bunny 12 Clusters">
-                    <figcaption>▲ Fig 6: K=12 (Ears, tail, and fine details are perfectly peeled apart)</figcaption>
+                    <figcaption>▲ Fig 6: K=12 (Smaller geometric regions become visible)</figcaption>
                 </figure>
             </div>
-            <p style="margin-top: 1.5rem;"><strong>Conclusion:</strong> Experiments confirm that the more eigenvectors utilized, the finer the clustering results. It precisely renders the intrinsic geometric shapes of complex objects, successfully breaking the limitations of traditional linear clustering!</p>
+            <p style="margin-top: 1.5rem;"><strong>Conclusion:</strong> The illustrated configurations show increasingly detailed partitions as the selected cluster count changes. This is not evidence that more eigenvectors or more clusters always produce a better result.</p>
         </section>
 
         <section id="mrt">
@@ -440,8 +442,8 @@
                 </figure>
                 <div>
                     <h3>Fare as Distance: Revealing Urban Structural Shifts</h3>
-                    <p>Comparisons reveal that, except for the central region, the clustering results of fare and Euclidean distance are nearly identical, proving fare is an excellent proxy for distance. More intriguingly, when we increase the cluster count from K=4 to K=6, Taipei's three main cores (Taipei Main Station, Xinyi, Neihu) are cleanly separated into independent blocks.</p>
-                    <p>The originally strong links of a massive core are severed. In terms of the cost function, this means "breaking off from these sub-centers is the lower-cost choice." This mathematically validates a hard social science theory: <strong>Taipei is transitioning from a monocentric to a polycentric city</strong>.</p>
+                    <p>Comparisons reveal that, except for the central region, the clustering results of fare and Euclidean distance are similar in several regions, suggesting fare and geographic distance encode overlapping structure in this example. More intriguingly, when we increase the cluster count from K=4 to K=6, Taipei's three main cores (Taipei Main Station, Xinyi, Neihu) are cleanly separated into independent blocks.</p>
+                    <p>The originally strong links of a massive core are severed. In terms of the cost function, this means "breaking off from these sub-centers is the lower-cost choice." This partition is <strong>consistent with a polycentric interpretation</strong>, but it does not establish a historical transition or a causal urban-development mechanism. Such claims require additional mobility and land-use evidence.</p>
                 </div>
             </div>
 
@@ -474,35 +476,40 @@
             <div class="grid-2">
                 <figure>
                     <img src="mri_simple.png" alt="Simple MRI Segmentation">
-                    <figcaption>▲ Case 1: Simple MRI (with contrast). Setting 3 clusters (excluding background) successfully isolates the tumor.</figcaption>
+                    <figcaption>▲ Case 1: Simple MRI (with contrast). Setting 3 clusters (excluding background) visually separates a candidate tumor region.</figcaption>
                 </figure>
                 <figure>
                     <img src="mri_complex.png" alt="Complex MRI Segmentation">
-                    <figcaption>▲ Case 2: Complex shape (with contrast). Setting 8 clusters (excluding background) successfully overcomes noise.</figcaption>
+                    <figcaption>▲ Case 2: Complex shape (with contrast). Setting 8 clusters (excluding background) shows an exploratory partition of a more complex image.</figcaption>
                 </figure>
             </div>
 
             <h3>Feature Extraction Optimization & Improvement Efficacy</h3>
-            <p>In our current upgraded phase, we officially introduced the customized feature extraction functions discussed earlier. Previously, the raw method required setting up to 7 clusters (excluding background) to separate the brain tumor from surrounding complex tissues. After deep optimization via feature engineering, the algorithm now possesses outstanding geometric and shape awareness.</p>
-            <p>Currently, we <strong>only need to set 2 clusters (excluding background, directly bisecting into "Tumor" and "Non-Tumor")</strong> to perfectly and precisely isolate the tumor region, drastically streamlining the computational structure and enhancing diagnostic utility.</p>
+            <p>In our current upgraded phase, we officially introduced the customized feature extraction functions discussed earlier. Previously, the raw method required setting up to 7 clusters (excluding background) to separate the brain tumor from surrounding complex tissues. After deep optimization via feature engineering, the illustrative partition shows a change when shape-related features are added.</p>
+            <p>Currently, we <strong>only need to set 2 clusters (excluding background, directly bisecting into "Tumor" and "Non-Tumor")</strong> to obtain a visually clearer separation in the illustrated case. Without ground-truth masks and quantitative evaluation, neither segmentation accuracy nor clinical utility can be established.</p>
             
-            <p>In this breakthrough, <strong>"Circularity"</strong> played an incredibly vital role. Because brain tumors (especially malignant ones) typically exhibit irregular, infiltrative growth with rugged edges, while certain normal brain structures or noise-induced bright spots usually have smoother or elongated geometries. To give the algorithm the ability to "automatically recognize shapes," we introduced the circularity formula to quantify this feature:</p>
+            <p>In the illustrated feature design, <strong>circularity</strong> serves as one shape-related cue. Because brain tumors (especially malignant ones) typically exhibit irregular, infiltrative growth with rugged edges, while certain normal brain structures or noise-induced bright spots usually have smoother or elongated geometries. To give the algorithm the ability to "automatically recognize shapes," we introduced the circularity formula to quantify this feature:</p>
 
             <div class="math-box">
                 \[ \text{Circularity} = \frac{4\pi \times \text{Area}}{\text{Perimeter}^2} \]
             </div>
 
-            <p>According to this geometric formula, the closer a shape is to a perfect circle, the closer its circularity is to 1. Conversely, the more elongated the shape, or the more irregular its edges (causing the perimeter in the denominator to spike), the circularity value drops sharply toward 0. We combined Brightness and Circularity at a 4:6 ratio, enabling the algorithm to not only see "light and dark" but also "feel shapes." This successfully filters out high-brightness but elongated non-tumor tissues (like blood vessels or sulci), precisely locking onto the true tumor region.</p>
+            <p>According to this geometric formula, the closer a shape is to a perfect circle, the closer its circularity is to 1. Conversely, the more elongated the shape, or the more irregular its edges (causing the perimeter in the denominator to spike), the circularity value drops sharply toward 0. We combined Brightness and Circularity at a 4:6 ratio, enabling the algorithm to not only see "light and dark" but also "feel shapes." This may help distinguish regions with different shapes in these illustrations, but it cannot reliably distinguish tumor from normal tissue without broader evaluation.</p>
             
             <div class="grid-2">
                 <div>
-                    <p>In the future, we plan to expand from 2D to 3D imaging, incorporating more textural features or lightweight machine learning models, allowing this Graph Laplacian-based segmentation technology to deliver immense assistive value in actual clinical diagnostics.</p>
+                    <p>In the future, we plan to expand from 2D to 3D imaging, incorporating more textural features or lightweight machine learning models, allowing this Graph Laplacian-based segmentation technology to be evaluated for potential clinical research use after quantitative validation.</p>
                 </div>
                 <figure>
-                    <img src="升級過後的.png" alt="Perfect Segmentation after Shape Features">
-                    <figcaption>▲ After introducing shape awareness and upgraded features, only 2 clusters are needed to perfectly isolate the true tumor region.</figcaption>
+                    <img src="升級過後的.png" alt="Exploratory MRI partition using shape-related features">
+                    <figcaption>▲ After introducing shape awareness and upgraded features, the illustrated two-cluster setting produces a visually distinct candidate region (not clinically validated).</figcaption>
                 </figure>
             </div>
+        </section>
+        <section id="limitations">
+            <h2>Scope and Limitations</h2>
+            <p>These are exploratory examples, not benchmarked demonstrations of universal superiority. Partitions depend on features, similarity scales, and clustering settings. The MRI illustrations lack ground-truth-based segmentation metrics and do not constitute a clinical diagnostic system; MRT groupings do not demonstrate urban causality.</p>
+            <p>For project context, sources, and the research poster, see the <a href="https://github.com/Rozias0925/FY26-Graph-Clustering-Intro" target="_blank" rel="noopener noreferrer">GitHub repository</a>.</p>
         </section>
 
     </div>
